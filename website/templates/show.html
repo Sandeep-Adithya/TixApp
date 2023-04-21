@@ -1,0 +1,71 @@
+{% extends "base.html" %} {% block title %}Venues{% endblock %} {% block content
+    %}
+
+<h1 class="ps-2 pb-2">Movies at {{venue.name}} </h1>
+<h5 class="ps-2 pb-2">{{venue.address}}, {{venue.city}}</h5>
+<div class="container">
+    <section style="padding-right: 50px;padding-left: 50px;padding-top: 50px;padding-bottom: 50px;">
+    {%for show in movie %} 
+    {% set mov = show.movie_id%} 
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title text-dark">{{show.movie.name}}</h4>
+                <h6 class="text-muted card-subtitle mb-2">Ratings : {{show.movie.rating}}</h6>
+                <br>
+                {%for sho in shows %}
+                {% if sho.movie_id == mov %}
+                <a class="btn btn-primary ms-md-2" role="button" href="/book/{{sho.id}}" data-bs-toggle="modal" data-bs-target="#bookingModal{{ sho.id }}">{{sho.time}}</a>
+                <div
+                class="modal fade"
+                id="bookingModal{{ sho.id }}"
+                tabindex="-1"
+                aria-labelledby="bookingModalLabel{{ sho.id }}"
+                aria-hidden="true"
+                >
+                <div
+                    class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-dark"
+                >
+                    <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bookingModalLabel{{ sho.id }}">
+                        Book Tickets for {{ sho.movie.name }}
+                        </h5>
+                        <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body bg-dark">
+                        <form method="post">
+                        <div class="mb-3">
+                            <label for="ticket-count" class="form-label"
+                            >Number of Tickets</label
+                            >
+                            <div class="input-group">
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="ticket-count"
+                                name="ticket-count"
+                                value="1"
+                            />
+                            </div>
+                        </div>
+                        <input type="hidden" name="show-id" value="{{sho.id}}" />
+                        <input type="submit" class="btn btn-primary" id="book-btn" />
+                        </form>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</section>
+</div>
+
+    {% endblock %}

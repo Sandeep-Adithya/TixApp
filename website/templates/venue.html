@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% block title %}Venues{% endblock %} {% block content
+    %}
+
+    <div class="container">
+        <br>
+        <br>
+    <div class="row">
+      {% for venue in venues %}
+      <div class="col-md-4 mb-4">
+        <div class="card bg-light">
+          <div class="card-body ">
+            <h5 class="card-title text-dark">{{ venue.name }}</h5>
+            <p class="card-text text-muted">{{ venue.address }}, {{ venue.city }}</p>
+            <a
+              href="./{{venue.id}}"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#"
+              >Book</a
+            >
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+    {% endblock %}
