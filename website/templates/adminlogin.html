@@ -1,5 +1,4 @@
-{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
-%}
+{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content %}
 <section
   class="py-4 py-xl-5"
   style="color: var(--bs-white); background: #212529"
@@ -64,7 +63,7 @@
                   {% with messages = get_flashed_messages() %}
 {% if messages %}
 
-<p{% if messages[-1] %} class="list-inline alert alert-warning"{% endif %}>{{ messages[-1] }}</p>
+<p>{% if messages[-1] %} class="list-inline alert alert-warning"{% endif %}>{{ messages[-1] }}</p>
 {% endif %}
 {% endwith %}
             </form>
