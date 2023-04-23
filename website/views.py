@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify, abort, redirect, url_for
 from flask_login import login_required, current_user, set_login_view
 from .models import *
-from . import db
+#from . import db
 import json
 from functools import wraps
 from datetime import datetime
@@ -33,6 +33,7 @@ def home():
     if current_user.is_authenticated:
         if current_user.role == 'user':
             movies = Movie.query.all()
+            
             return render_template("home.html", user=current_user, movies=movies)
         else:
             return redirect(url_for('admin.index'))
@@ -98,8 +99,9 @@ def book_movie(movie_id):
 
     
     movie = Movie.query.filter_by(id=movie_id).first()
-    shows = Show.query.filter_by(movie_id=movie_id)
-    return render_template("book-movie.html", user=current_user, shows=shows, movie=movie)
+    shows = Show.query.filter_by(movie_id=movie_id).order_by(Show.venue_id).all()
+    venue = Show.query.filter_by(movie_id=movie_id).group_by(Show.venue_id).all()
+    return render_template("book-movie.html", user=current_user, shows=shows, movie=movie, venue=venue)
 
 @views.route('/bookings', methods=['GET'])
 @login_required

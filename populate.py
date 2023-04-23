@@ -1,12 +1,12 @@
 # import your Flask app and database instance
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from website.models import *
+from website.models import Venue, Movie, Tag, Show, User
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
-# app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 db.init_app(app)
 
@@ -22,10 +22,10 @@ with app.app_context():
     ]
 
     venues = [
-        Venue(name="PVR", address="VR Mall", city="Vizag", capacity=100),
+        Venue(name="PVR", address="VR Mall", city="Chennai", capacity=100),
         Venue(name="INOX", address="Daba Gardens", city="Vizag", capacity=100),
-        Venue(name="Cinepolis", address="Daba Gardens", city="Vizag", capacity=100),
-        Venue(name="PVR", address="Daba Gardens", city="Vizag", capacity=100),
+        Venue(name="Cinepolis", address="Daba Gardens", city="Mumbai", capacity=100),
+        Venue(name="PVR", address="Daba Gardens", city="Hyderabad", capacity=100),
         Venue(name="INOX", address="VR Mall", city="Vizag", capacity=100),
     ]
 

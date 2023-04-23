@@ -4,24 +4,27 @@
   function doSearch(value) {
     n = document.getElementsByClassName("card-title");
     for (let i = 0; i < n.length; i++) {
-        searchString = (n[i].innerHTML + n[i].getAttribute("data-movie-rating")).toLowerCase();
-        if (searchString.search(value.toLowerCase()) != -1) {
-          //console.log(`a-${n[i].getAttribute("name")}`);
-          document.getElementsByName(`a-${n[i].getAttribute("name")}`).forEach((element) => {
-            element.hidden = false;
-          });
-        } else {
-          //document.getElementById(`a-${element.id}`).hidden = true;
-          document.getElementsByName(`a-${n[i].getAttribute("name")}`).forEach((element) => {
-            element.hidden = true;
-          });
-        }
+      searchString = (n[i].innerHTML + n[i].getAttribute("data-movie-rating") + n[i].getAttribute("data-movie-tags")).toLowerCase();
+      if (searchString.search(value.toLowerCase()) != -1) {
+        //console.log(`a-${n[i].getAttribute("name")}`);
+        document.getElementsByName(`a-${n[i].getAttribute("name")}`).forEach((element) => {
+          element.hidden = false;
+        });
+      } else {
+        //document.getElementById(`a-${element.id}`).hidden = true;
+        document.getElementsByName(`a-${n[i].getAttribute("name")}`).forEach((element) => {
+          element.hidden = true;
+        });
+      }
     }
   }
 </script>
-<h1 class="ps-2 pb-2">Movies 🍿</h1>
-<h4 class="ps-3">Search</h4>
-<input type="text" oninput="doSearch(this.value)" placeholder="Search Movie/Rating">
+<div style="display: flex;">
+<h1 class="ps-2 pb-2 title" style="width: 100%;">Movies 🍿</h1>
+<div class="container" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-end; align-items: center;">
+  <h4 class="ps-3 ms-md-3">Search</h4>
+  <input class="form-control ms-md-3" style="width: auto;" type="text" oninput="doSearch(this.value)" placeholder="Search Movie">
+</div></div>
 <div class="container">
   <div class="row">
     {%for movie in movies%} {% include 'cards.html' %} {% endfor %}

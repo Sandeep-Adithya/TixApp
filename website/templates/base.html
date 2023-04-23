@@ -36,8 +36,23 @@
             <a href="/bookings" class="nav-link">My Bookings</a>
           </li>
         </ul>
+        <form class="ms-md-3">
+          <select class="btn btn-dark " name="city" id="city-select" city_selected=value >
+            {% for city in city_menu %}
+            {% if city[0] == user.city %}
+            <option value="{{city[0]}}" selected>{{city[0]}}</option>
+            {% set city_selected = city[0] %}
+            {% else %}
+            <option value="{{city[0]}}">{{city[0]}}</option>
+            {% endif %}
+            {% endfor %}
+            </select>
+        </form>
+   
 
-        <a class="btn btn-primary ms-md-2" role="button" href="/logout">Logout</a>
+        <a class="btn btn-primary ms-md-3" role="button" href="/logout">Logout</a>
+
+        <p>{{city_selected}}</p>
         {% else %}
         <ul class="navbar-nav ms-auto">
           <a class="btn btn-primary ms-md-2" role="button" href="/login">Login</a>
@@ -49,6 +64,7 @@
   </nav>
 
   <div class="container">{% block content %} {% endblock %}</div>
+  
   <footer class="text-center bg-dark">
     <div class="text-white py-4 bg-dark py-lg-5">
       <ul class="list-inline">

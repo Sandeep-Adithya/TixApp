@@ -115,8 +115,8 @@ def create_app():
     class ShowForm(BaseForm):
         movie = QuerySelectField('Movie', query_factory=lambda: Movie.query.all(), get_label='name')
         venue = QuerySelectField('Venue', query_factory=lambda: Venue.query.all(), get_label='name')
-        time = DateTimeField('Time',validators=[DataRequired()], format='%d-%m-%y %H:%M:00', default=datetime.now().replace(year=datetime.now().year)
-    )
+        time = DateTimeField('Time',validators=[DataRequired()], format='%d-%m-%y %H:%M:00',default=datetime.now())
+        # time = DateTimeField('Time',validators=[DataRequired()], format='%d-%m-%y %H:%M:00', default=datetime.now().replace(year=datetime.now().year))
 
     class ShowView(BaseView):
         form = ShowForm
@@ -139,6 +139,13 @@ def create_app():
     admin.add_view(ShowView(Show, db.session))
     admin.add_view(TagView(Tag, db.session))
     admin.add_view(TicketView(Ticket, db.session))
+
+    @app.context_processor
+    def my_template_context_processor():
+        # Define the variable that you want to add to the context
+        city= db.session.query(Venue.city).group_by(Venue.city).all()
+        # Return a dictionary of variables to add to the context
+        return {'city_menu': city}
 
     return app
 

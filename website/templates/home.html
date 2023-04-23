@@ -1,30 +1,8 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
 <!-- <h3>Welcome, {{ user.username }}!</h3> -->
-<script>
-  function doSearch(value) {
-    n = document.getElementsByClassName("card-title");
-    for (let i = 0; i < n.length; i++) {
-        if (n[i].innerHTML.toLowerCase().search(value.toLowerCase()) != -1) {
-          //console.log(`a-${n[i].getAttribute("name")}`);
-          document.getElementsByName(`a-${n[i].getAttribute("name")}`).forEach((element) => {
-            element.parentElement.hidden = false;
-          });
-        } else {
-          //document.getElementById(`a-${element.id}`).hidden = true;
-          document.getElementsByName(`a-${n[i].getAttribute("name")}`).forEach((element) => {
-            element.parentElement.hidden = true;
-          });
-        }
-    }
-  }
-</script>
 <div class="container">
   <h2 class="ps-3">Now Showing</h2>
-  <div>
-    <h4 class="ps-3">Search</h4>
-    <input type="text" oninput="doSearch(this.value)">
-  </div>
   {% if movies %}
   <div class="slider responsive">
     {% for movie in movies %} {% include 'cards.html' %} {% endfor %}

@@ -7,8 +7,11 @@
     />
     <!-- style="object-fit: cover; width: 100%; height: 100%" -->
     <div class="card-body" style="height: 40%">
-      <h3 class="card-title text-muted mb-2" data-movie-rating="{{movie.rating}}" name="{{movie.id}}">{{ movie.name }}</h3>
-      <h5 class="card-subtitle text-dark">Rating: {{ movie.rating }}</h5>
+      <h3 class="card-title text-dark mb-2" data-movie-rating="{{movie.rating}}" data-movie-tags="{% for tag in movie.tags %}{{ tag.name }} {% endfor %}" name="{{movie.id}}">{{ movie.name }}</h3>
+      <h5 class="card-subtitle text-dark">Rating: {{ movie.rating }}</h5><br>
+      {% for tag in movie.tags %}
+      <div class="btn btn-secondary ms-auto m-1">{{ tag.name }}</div>
+      {% endfor %}
     </div>
   </div>
 </a>

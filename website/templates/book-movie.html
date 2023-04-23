@@ -1,86 +1,117 @@
 {% extends 'base.html' %} {% block content %}
+
+<script>
+  dropdown = document.getElementById("city-select");
+  city_selected=dropdown.value
+  document.getElementsByName("ven").forEach((element) => {
+      if (element.getAttribute("data-city").toLowerCase().search(city_selected.toLowerCase()) != -1) {
+        element.hidden = false;
+      } else {
+        element.hidden = true;
+      }
+    });
+  dropdown.addEventListener('change', function() {
+  city_selected=dropdown.value
+  document.getElementsByName("ven").forEach((element) => {
+      if (element.getAttribute("data-city").toLowerCase().search(city_selected.toLowerCase()) != -1) {
+        element.hidden = false;
+      } else {
+        element.hidden = true;
+      }
+    });});
+
+    function doSearch(value) {
+    document.getElementsByName("ven").forEach((element) => {
+      SearchString = (element.id + element.getAttribute("data-venue") + element.getAttribute("data-city")).toLowerCase();
+      if (SearchString.search(value.toLowerCase()) != -1) {
+        element.hidden = false;
+      } else {
+        element.hidden = true;
+      }
+    });
+  }
+</script>
+
+<h1>{{ movie.name }}</h1>
+<h5>Rating: {{ movie.rating }}</h5>
+
+{% if movie.description %}
+<p>{{ movie.description }}</p>
+{% endif %}
+
+<hr />
+<div style="display: flex;">
+  <h2 class="ps-2 pb-2 title" style="width: 100%;">Available Shows:</h2>
+  <div class="container" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-end; align-items: center;">
+    <h4 class="ps-3 ms-md-3">Search</h4>
+    <input class="form-control ms-md-3" style="width: auto;" type="text" oninput="doSearch(this.value)" placeholder="Search Venue">
+  </div></div>
+
+
 <div class="container">
-  <h1>{{ movie.name }}</h1>
-  <h5>Rating: {{ movie.rating }}</h5>
-
-  {% if movie.description %}
-  <p>{{ movie.description }}</p>
-  {% endif %}
-
-  <hr />
-
-  <h2>Available Shows:</h2>
-  <br>
-  {% if shows %}
-  <div class="row">
-    {% for show in shows %}
-    <div class="col-md-4 mb-4">
-      <div class="card bg-light">
-        <div class="card-body">
-          <h5 class="card-title text-dark">{{ show.venue.name }}</h5>
-          <p class="card-text text-muted">{{ show.venue.address }}, {{show.venue.city}}</p>
-          <p class="card-text text-dark">Date: {{ show.time.strftime('%d-%m-%Y') }}</p>
-          <p class="card-text text-dark">Time: {{ show.time.strftime('%H:%M') }}</p>
-          <a
-            href="/book/{{show.id}}"
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#bookingModal{{ show.id }}"
-            >Book</a
-          >
-        </div>
-      </div>
-    </div>
-    <!-- Modal for booking tickets -->
-    <div
-      class="modal fade"
-      id="bookingModal{{ show.id }}"
-      tabindex="-1"
-      aria-labelledby="bookingModalLabel{{ show.id }}"
-      aria-hidden="true"
-    >
-      <div
-        class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-dark"
-      >
-        <div class="modal-content bg-dark">
-          <div class="modal-header">
-            <h5 class="modal-title" id="bookingModalLabel{{ show.id }}">
-              Book Tickets for {{ show.movie.name }}
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body bg-dark">
-            <form method="post">
-              <div class="mb-3">
-                <label for="ticket-count" class="form-label"
-                  >Number of Tickets</label
-                >
-                <div class="input-group">
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="ticket-count"
-                    name="ticket-count"
-                    value="1"
-                  />
-                </div>
+  <section style="padding-right: 50px;padding-left: 50px;padding-top: 50px;padding-bottom: 50px;">
+  {%for show in venue %} 
+  {% set ven = show.venue_id%} 
+      <div class="card mb-2" name="ven" data-venue="{{show.venue.address}}" data-city="{{show.venue.city}}" id="{{show.venue.name}}">
+          <div class="card-body">
+              <h4 class="card-title text-dark">{{show.venue.name}}</h4>
+              <h6 class="text-muted card-subtitle mb-2" city="{{show.venue.city}}">{{show.venue.address}}, {{show.venue.city}}</h6>
+              <br>
+              {%for sho in shows %}
+              {% if sho.venue_id == ven %}
+              <a class="btn btn-primary ms-md-2" role="button" href="/book/{{sho.id}}" data-bs-toggle="modal" data-bs-target="#bookingModal{{ sho.id }}">{{sho.time}}</a>
+              <div
+              class="modal fade"
+              id="bookingModal{{ sho.id }}"
+              tabindex="-1"
+              aria-labelledby="bookingModalLabel{{ sho.id }}"
+              aria-hidden="true"
+              >
+              <div
+                  class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-dark"
+              >
+                  <div class="modal-content bg-dark">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="bookingModalLabel{{ sho.id }}">
+                      Book Tickets for {{ sho.movie.name }}
+                      </h5>
+                      <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                      ></button>
+                  </div>
+                  <div class="modal-body bg-dark">
+                      <form method="post">
+                      <div class="mb-3">
+                          <label for="ticket-count" class="form-label"
+                          >Number of Tickets</label
+                          >
+                          <div class="input-group">
+                          <input
+                              type="number"
+                              class="form-control"
+                              id="ticket-count"
+                              name="ticket-count"
+                              value="1"
+                          />
+                          </div>
+                      </div>
+                      <input type="hidden" name="show-id" value="{{sho.id}}" />
+                      <input type="submit" class="btn btn-primary" id="book-btn" />
+                      </form>
+                  </div>
+                  </div>
               </div>
-              <input type="hidden" name="show-id" value="{{show.id}}" />
-              <input type="submit" class="btn btn-primary" id="book-btn" />
-            </form>
+              </div>
+              {% endif %}
+              {% endfor %}
           </div>
-        </div>
       </div>
-    </div>
-    {% endfor %}
-  </div>
-  {% else %}
-  <p>No shows available at the moment.</p>
-  {% endif %}
+  {% endfor %}
+</section>
 </div>
-{% endblock %}
+
+  {% endblock %}
+

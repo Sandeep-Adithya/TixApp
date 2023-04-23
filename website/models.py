@@ -2,11 +2,6 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
-# show_venue = db.Table(
-#     'show_venue',
-#     db.Column('show_id', db.Integer, db.ForeignKey('show.id'), primary_key=True),
-#     db.Column('venue_id', db.Integer, db.ForeignKey('venue.id'), primary_key=True)
-# )
 
 class Mtag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -62,7 +57,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     username = db.Column(db.String(150))
-    # city = db.Column(db.String(150))
+    city = db.Column(db.String(150))
     tickets = db.relationship('Ticket', backref='user')
     role = db.Column(db.String(20), default='user')
     # notes = db.relationship('Note')

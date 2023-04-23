@@ -1,15 +1,40 @@
 {% extends "base.html" %} {% block title %}Venues{% endblock %} {% block content
     %}
-
+<script>
+       function doSearch(value) {
+    n = document.getElementsByClassName("card-title");
+    for (let i = 0; i < n.length; i++) {
+      searchString = (n[i].innerHTML + n[i].getAttribute("data-movie-rating") + n[i].getAttribute("data-movie-tags")).toLowerCase();
+      if (searchString.search(value.toLowerCase()) != -1) {
+        //console.log(`a-${n[i].getAttribute("name")}`);
+        document.getElementsByName(`a-${n[i].getAttribute("name")}`).forEach((element) => {
+          element.hidden = false;
+        });
+      } else {
+        //document.getElementById(`a-${element.id}`).hidden = true;
+        document.getElementsByName(`a-${n[i].getAttribute("name")}`).forEach((element) => {
+          element.hidden = true;
+        });
+      }
+    }
+  }
+</script>
+<div style="display: flex;">
+<div style="display: block; width: 100%;">
 <h1 class="ps-2 pb-2">Movies at {{venue.name}} </h1>
 <h5 class="ps-2 pb-2">{{venue.address}}, {{venue.city}}</h5>
+</div>
+<div class="container" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-end; align-items: center;">
+  <h4 class="ps-3 ms-md-3">Search</h4>
+  <input class="form-control ms-md-3" style="width: auto;" type="text" oninput="doSearch(this.value)" placeholder="Search Movie">
+</div></div>
 <div class="container">
     <section style="padding-right: 50px;padding-left: 50px;padding-top: 50px;padding-bottom: 50px;">
     {%for show in movie %} 
     {% set mov = show.movie_id%} 
-        <div class="card">
+        <div class="card" name="a-{{show.movie.id}}">
             <div class="card-body">
-                <h4 class="card-title text-dark">{{show.movie.name}}</h4>
+                <h4 class="card-title text-dark" data-movie-rating="{{show.movie.rating}}" data-movie-tags="{% for tag in show.movie.tags %}{{ tag.name }} {% endfor %}" name="{{show.movie.id}}">{{show.movie.name}}</h4>
                 <h6 class="text-muted card-subtitle mb-2">Ratings : {{show.movie.rating}}</h6>
                 <br>
                 {%for sho in shows %}

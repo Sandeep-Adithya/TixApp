@@ -10,6 +10,7 @@ users = [
     "password1": "123",
     "password2": "123",
     "username": "abc",
+    "city" : "Chennai",
     "role": "admin"
   },
   {
@@ -17,6 +18,7 @@ users = [
     "password1": "456",
     "password2": "456",
     "username": "def",
+    "city" : "Mumbai",
     "role": "user"
   },
   {
@@ -24,6 +26,7 @@ users = [
     "password1": "789",
     "password2": "789",
     "username": "ghi",
+    "city" : "Delhi",
     "role": "user"
   },
   {
@@ -31,6 +34,7 @@ users = [
     "password1": "101112",
     "password2": "101112",
     "username": "jkl",
+    "city" : "Hyderabad",
     "role": "user"
   },
   {
@@ -38,6 +42,7 @@ users = [
     "password1": "131415",
     "password2": "131415",
     "username": "mno",
+    "city" : "Chennai",
     "role": "user"
   }
 ]
