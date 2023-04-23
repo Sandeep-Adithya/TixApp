@@ -1,12 +1,27 @@
 {% extends "base.html" %} {% block title %}Venues{% endblock %} {% block content
     %}
 
+    <script>
+      function doSearch(value) {
+        document.getElementsByName("ven").forEach((element) => {
+          SearchString = (element.id + element.getAttribute("data-venue") + element.getAttribute("data-city")).toLowerCase();
+          if (SearchString.search(value.toLowerCase()) != -1) {
+            element.hidden = false;
+          } else {
+            element.hidden = true;
+          }
+        });
+      }
+    </script>
+
     <div class="container">
+      <h4 class="ps-3">Search</h4>
+      <input type="text" oninput="doSearch(this.value)" placeholder="Search Venue">
         <br>
         <br>
     <div class="row">
       {% for venue in venues %}
-      <div class="col-md-4 mb-4">
+      <div class="col-md-4 mb-4" name="ven" data-venue="{{venue.address}}" data-city="{{venue.city}}" id="{{venue.name}}">
         <div class="card bg-light">
           <div class="card-body ">
             <h5 class="card-title text-dark">{{ venue.name }}</h5>
