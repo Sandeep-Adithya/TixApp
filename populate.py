@@ -6,7 +6,7 @@ from website.models import Venue, Movie, Tag, Show, User
 db = SQLAlchemy()
 DB_NAME = "database.db"
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
+# app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 db.init_app(app)
 
@@ -38,20 +38,22 @@ with app.app_context():
     ]
 
     shows = [
-        Show(movie_id=1, venue_id=1),
-        Show(movie_id=1, venue_id=2),
-        Show(movie_id=1, venue_id=3),
-        Show(movie_id=1, venue_id=4),
-        Show(movie_id=1, venue_id=5)
+        Show(movie_id=1, venue_id=1, ticket_price=300),
+        Show(movie_id=1, venue_id=2, ticket_price=300),
+        Show(movie_id=1, venue_id=3, ticket_price=300),
+        Show(movie_id=1, venue_id=4, ticket_price=300),
+        Show(movie_id=1, venue_id=5, ticket_price=300)
     ]
 
 
 
-    for i in venues, movies, shows, tags:
+    for i in venues, movies, tags:
         for j in i:
             db.session.add(j)
 
-    db.session.commit()
+    for i in shows:
+        db.session.add(i)
 
-    # print the users to verify they were added
+
+    db.session.commit()
     print(User.query.all())

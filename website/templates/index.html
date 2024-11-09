@@ -1,0 +1,14 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+    %}
+     <h1 style="display:flex; justify-content: center;">Welcome to TIX APP!</h1> 
+    <div class="container">
+      <h2 class="ps-3">Now Showing</h2>
+      {% if movies %}
+      <div class="slider responsive">
+        {% for movie in movies %} {% include 'cards.html' %} {% endfor %}
+      </div>
+      {% else %}
+        <p style="text-align: center; font-size:xx-large; padding-top: 100px; padding-bottom: 200px; "> Wating for movies... </p>
+      {% endif %}
+    </div>
+    {% endblock %}

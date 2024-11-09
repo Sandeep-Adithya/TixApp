@@ -2,14 +2,6 @@
 
 <script>
   dropdown = document.getElementById("city-select");
-  city_selected=dropdown.value
-  document.getElementsByName("ven").forEach((element) => {
-      if (element.getAttribute("data-city").toLowerCase().search(city_selected.toLowerCase()) != -1) {
-        element.hidden = false;
-      } else {
-        element.hidden = true;
-      }
-    });
   dropdown.addEventListener('change', function() {
   city_selected=dropdown.value
   document.getElementsByName("ven").forEach((element) => {
@@ -30,6 +22,9 @@
       }
     });
   }
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector("#city-select").dispatchEvent(new Event("change"));
+  });
 </script>
 
 <h1>{{ movie.name }}</h1>
@@ -52,6 +47,7 @@
   <section style="padding-right: 50px;padding-left: 50px;padding-top: 50px;padding-bottom: 50px;">
   {%for show in venue %} 
   {% set ven = show.venue_id%} 
+  {% set total_capacity = show.venue.capacity%}
       <div class="card mb-2" name="ven" data-venue="{{show.venue.address}}" data-city="{{show.venue.city}}" id="{{show.venue.name}}">
           <div class="card-body">
               <h4 class="card-title text-dark">{{show.venue.name}}</h4>
@@ -59,7 +55,12 @@
               <br>
               {%for sho in shows %}
               {% if sho.venue_id == ven %}
-              <a class="btn btn-primary ms-md-2" role="button" href="/book/{{sho.id}}" data-bs-toggle="modal" data-bs-target="#bookingModal{{ sho.id }}">{{sho.time}}</a>
+              {% set remaining = total_capacity - sho.tickets_booked %}
+              {% if remaining !=0 %}
+              <a class="btn btn-primary ms-md-2" role="button" href="/book/{{sho.id}}" data-bs-toggle="modal" data-bs-target="#bookingModal{{ sho.id }}">{{sho.time}} ({{remaining}})</a>
+              {% else %}
+              <a class="btn btn-dark-disabled ms-md-2" role="button" ">{{sho.time}} (Housefull)</a>
+              {% endif %}
               <div
               class="modal fade"
               id="bookingModal{{ sho.id }}"
@@ -85,6 +86,7 @@
                   <div class="modal-body bg-dark">
                       <form method="post">
                       <div class="mb-3">
+                        <div class="text-light">Cost per ticket: Rs.{{sho.ticket_price}}</div><br>
                           <label for="ticket-count" class="form-label"
                           >Number of Tickets</label
                           >

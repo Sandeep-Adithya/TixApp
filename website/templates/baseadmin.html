@@ -13,8 +13,7 @@
       {% endif %}{{ admin_view.name }} - {{ admin_view.admin.name }}{% endblock
       %}
     </title>
-    <link href="{{ admin_static.url(filename='bootstrap/bootstrap4/swatch/{swatch}/bootstrap.min.css'.format(swatch=config.get('FLASK_ADMIN_SWATCH', 'default')), v='4.2.1') }}"
-              rel="stylesheet">
+    
     {% if config.get('FLASK_ADMIN_SWATCH', 'default') == 'default' %}
     <link href="{{ admin_static.url(filename='bootstrap/bootstrap4/css/bootstrap.min.css', v='4.2.1') }}" rel="stylesheet">
     {% endif %}
@@ -32,6 +31,7 @@
       href="{{ admin_static.url(filename='bootstrap/bootstrap4/css/font-awesome.min.css', v='4.7.0') }}"
       rel="stylesheet"
     />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {% if admin_view.extra_css %}
           {% for css_url in admin_view.extra_css %}
             <link href="{{ css_url }}" rel="stylesheet">
@@ -109,11 +109,11 @@
 
     <footer class="text-center bg-dark">
       <div class="container text-white py-4 py-lg-5">
-        {% block footer_menu %}
+        <!-- {% block footer_menu %}
                 <ul class="list-inline">
-                    {{ layout.menu(class_name="list-inline-item m-2") }}
+                    {{ layout.menu() }}
                 </ul>
-            {% endblock %}
+            {% endblock %} -->
         <ul class="list-inline">
           <li class="list-inline-item me-4">
             <svg
@@ -173,6 +173,7 @@
     <script src="/static/assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="/static/assets/js/script.min.js"></script>
+    
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.2/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.datatables.net/1.11.2/js/jquery.dataTables.min.js"></script>

@@ -14,12 +14,6 @@ class Tag(db.Model):
     #mtag = db.relationship('Mtag', backref='tag')
 
 
-# class Note(db.Model):
-    # id = db.Column(db.Integer, primary_key=True)
-    # data = db.Column(db.String(10000))
-    # date = db.Column(db.DateTime(timezone=True), default=func.now())
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
 class Venue(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150))
@@ -28,6 +22,15 @@ class Venue(db.Model):
     capacity = db.Column(db.Integer)
     show = db.relationship('Show', backref='venue')
     ticket = db.relationship('Ticket', backref='venue')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'address': self.address,
+            'city': self.city,
+            'capacity': self.capacity
+        }
 
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -38,12 +41,24 @@ class Movie(db.Model):
     description = db.Column(db.String(10000), default = "No description available")
     poster = db.Column(db.String(10000), default="/static/assets/img/poster.jpg")
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'rating': self.rating,
+            'description': self.description,
+            'poster': self.poster
+        }
+
 class Show(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'), nullable=False)
     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'), nullable=False)
     time = db.Column(db.DateTime(timezone=True), default=func.now())
     ticket = db.relationship('Ticket', backref='show')
+    tickets_booked = db.Column(db.Integer, default=0)
+    ticket_price = db.Column(db.Float, nullable=False)
+
 
 class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -60,19 +75,5 @@ class User(db.Model, UserMixin):
     city = db.Column(db.String(150))
     tickets = db.relationship('Ticket', backref='user')
     role = db.Column(db.String(20), default='user')
-    # notes = db.relationship('Note')
+
     
-
-
-# class Dummy(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(150))
-#     venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'))
-
-
-    # venue = db.relationship('Venue', backref=db.backref('tickets_venue', lazy='dynamic'))
-    # show = db.relationship('Show', backref=db.backref('tickets_show', lazy='dynamic'))
-    # user = db.relationship('User', backref=db.backref('tickets_user', lazy='dynamic'))
-
-    # def __repr__(self):
-    #     return f"Ticket {self.id} - {self.show.name} at {self.venue.name} for {self.user.email}"

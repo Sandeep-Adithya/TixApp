@@ -3,14 +3,6 @@
 
 <script>
   dropdown = document.getElementById("city-select");
-  city_selected=dropdown.value
-  document.getElementsByName("ven").forEach((element) => {
-      if (element.getAttribute("data-city").toLowerCase().search(city_selected.toLowerCase()) != -1) {
-        element.hidden = false;
-      } else {
-        element.hidden = true;
-      }
-    });
   dropdown.addEventListener('change', function() {
   city_selected=dropdown.value
   document.getElementsByName("ven").forEach((element) => {
@@ -31,7 +23,6 @@
       }
     });
   }
-
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#city-select").dispatchEvent(new Event("change"));
   });
@@ -43,9 +34,9 @@
     <h4 class="ps-3 ms-md-3">Search</h4>
     <input class="form-control ms-md-3" style="width: auto;" type="text" oninput="doSearch(this.value)" placeholder="Search Venue">
   </div></div>
-
+  <br>
     <div class="container">
-        <br>
+        
     <div class="row">
       {% for venue in venues %}
       <div class="col-md-4 mb-4" name="ven" data-venue="{{venue.address}}" data-city="{{venue.city}}" id="{{venue.name}}">

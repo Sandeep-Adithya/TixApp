@@ -11,7 +11,7 @@ from wtforms_sqlalchemy.fields import QuerySelectField, QuerySelectMultipleField
 from wtforms.validators import DataRequired
 from datetime import datetime
 from requests import request
-from sqlalchemy import func
+from sqlalchemy import func, desc
 
 
 db = SQLAlchemy()
@@ -42,10 +42,6 @@ def create_app():
     except:
         pass
 
-    # admin_login_manager = LoginManager()
-    # admin_login_manager.init_app(app)
-    # admin_login_manager.login_view = 'admin.login'
-
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
@@ -53,9 +49,29 @@ def create_app():
     class HomeView(AdminIndexView):
         @expose('/')
         def index(self):
-            movie= db.session.query(Movie.name, func.count(Ticket.id)).join(Show, Movie.id == Show.movie_id).join(Ticket, Show.id == Ticket.show_id).group_by(Movie.name).order_by(Movie.name.asc()).all()
-            venue= db.session.query(Venue.name, func.count(Ticket.id)).join(Ticket, Venue.id == Ticket.venue_id).group_by(Venue.name).order_by(Venue.name.asc()).all()
-            return self.render('admin_home.html',movie=movie, venue=venue)
+            movie_raw = db.session.query(Movie.name, func.count(Ticket.id)).join(Show, Movie.id == Show.movie_id).join(Ticket, Show.id == Ticket.show_id).group_by(Movie.name).order_by(desc(func.count(Ticket.id))).all()
+            movie_all = Movie.query.all()
+            M_X_Val=[]
+            M_Y_Val=[]
+            for m in movie_raw:
+                M_X_Val.append(m[0])
+                M_Y_Val.append(m[1])
+            for m in movie_all:
+                if m.name not in M_X_Val:
+                    M_X_Val.append(m.name)
+                    M_Y_Val.append(0)
+            venue_raw = db.session.query(Venue.name, func.count(Ticket.id)).join(Ticket, Venue.id == Ticket.venue_id).group_by(Venue.name).order_by(desc(func.count(Ticket.id))).all()
+            venue_all = Venue.query.all()
+            V_X_Val = []
+            V_Y_Val = []
+            for v in venue_raw:
+                V_X_Val.append(v[0])
+                V_Y_Val.append(v[1])
+            for v in venue_all:
+                if v.name not in V_X_Val:
+                    V_X_Val.append(v.name)
+                    V_Y_Val.append(0)
+            return self.render('admin_home.html',M_X_Val=M_X_Val[:5], M_Y_Val=M_Y_Val[:5], V_X_Val=V_X_Val[:5], V_Y_Val=V_Y_Val[:5])
 
     admin = Admin(app, base_template='baseadmin.html', template_mode='bootstrap4', index_view=HomeView())
 
@@ -128,10 +144,12 @@ def create_app():
     class TicketView(BaseView):
         can_create = False
         can_edit = False
+        can_select_all= True
+        
         column_display_pk = True
         column_hide_backrefs = False
-        column_list = ('id', 'venue.name', 'show.movie.name', 'user.username')
-        column_labels = { 'id' : 'ID' , 'venue.name' : 'Venue', 'show.movie.name' : 'Movie', 'user.username' : 'User'}
+        column_list = ('id', 'venue.name', 'show.movie.name', 'user.username', 'show.time')
+        column_labels = { 'id' : 'ID' , 'venue.name' : 'Venue', 'show.movie.name' : 'Movie', 'user.username' : 'User', 'show.time' : 'Date and Time'}
 
     admin.add_view(UserView(User, db.session))
     admin.add_view(VenueView(Venue, db.session))

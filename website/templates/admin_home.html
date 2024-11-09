@@ -1,43 +1,75 @@
 {% extends "baseadmin.html" %} {% block title %}Home{% endblock %} {% block body %}
-<div class="grid">
-    <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Movie</th>
-                    <th>Tickets Booked</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for m,t in movie %}
-                <tr>
-                    <td>{{m}}</td>
-                    <td>{{t}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
 <div class="container">
-    <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Theatre</th>
-                    <th>Tickets Booked</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for v,t in venue %}
-                <tr>
-                    <td>{{v}}</td>
-                    <td>{{t}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    <div class="row">
+
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <canvas id="venue_tickets_booked" style="width: 100%; max-width: 600px;"></canvas>
+    </div></div></div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <canvas id="movie_tickets_booked" style="width: 100%; max-width: 600px;"></canvas>
+    </div></div></div>
 </div>
+</div>
+<script>
+    new Chart("venue_tickets_booked", {
+        type: "bar",
+        data: {
+            labels: {{ V_X_Val| tojson}},
+        datasets: [{
+            label: '# of Tickets Booked',
+            data: {{ V_Y_Val| tojson}},
+        borderWidth: 1
+        }]
+      },
+        options: {
+        indexAxis: 'y',
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Top 5 Multiplex Industry with highest no of tickets sold'
+            }
+        }
+
+    }
+    });
+
+    new Chart("movie_tickets_booked", {
+        type: "bar",
+        data: {
+            labels: {{ M_X_Val| tojson}},
+        datasets: [{
+            label: '# of Tickets Booked',
+            data: {{ M_Y_Val| tojson}},
+        borderWidth: 1
+        }]
+      },
+        options: {
+        indexAxis: 'y',
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Top 5 Movies with highest no of tickets sold'
+            }
+        }
+
+    }
+    });
+</script>
+
 
 {% endblock %}

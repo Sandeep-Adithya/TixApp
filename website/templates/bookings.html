@@ -8,6 +8,7 @@ content %}
         <th>Ticket ID</th>
         <th>Movie</th>
         <th>Venue Name</th>
+        <th>Location</th>
         <th>Show Date</th>
         <th>Show Time</th>
       </tr>
@@ -19,6 +20,7 @@ content %}
         <td>{{ ticket.show.movie.name }}</td>
         {% set ven_id = ticket.venue_id | int - 1 %}
         <td>{{ venues[ven_id].name }}</td>
+        <td>{{ venues[ven_id].address }}, {{ venues[ven_id].city }}</td>
         <td>{{ ticket.show.time.strftime('%d-%m-%Y') }}</td>
         <td>{{ ticket.show.time.strftime('%H:%M') }}</td>
       </tr>
